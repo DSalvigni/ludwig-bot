@@ -27,3 +27,6 @@ The project leverages the following technologies:
 
 3. **Docker exec:**
     docker exec -it ollama ollama run llama3.1
+
+4. **Start to itneract:**
+docker attach ludwig
