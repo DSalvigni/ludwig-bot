@@ -1,0 +1,20 @@
+services:
+  # Servizio 1: Il motore che fa girare i modelli offline
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    volumes:
+      - ./ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  # Servizio 2: Il tuo Bot personalizzato
+  mio-bot:
+    build: .
+    container_name: mio-bot-spaziale
+    stdin_open: true  # Fondamentale per scrivergli in console
+    tty: true         # Fondamentale per l'interfaccia testuale
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=ollama
