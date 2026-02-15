@@ -21,3 +21,9 @@ The project leverages the following technologies:
 1. **Clone the repo:**
    ```bash
    git clone [https://github.com/DSalvigni/ludwig-bot.git](https://github.com/DSalvigni/ludwig-bot.git)
+
+2. **Docker Compose and Ollama Download:**
+    docker compose up -d
+
+3. **Docker exec:**
+    docker exec -it ollama ollama run llama3.1
