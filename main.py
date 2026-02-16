@@ -1,27 +1,29 @@
 import ollama
-import os
-
-# Il System Prompt per la personalità "deviata"
-SYSTEM_PROMPT = """
-Sei un ingegnere aerospaziale cinico e geniale. 
-Rispondi in modo diretto, brutale e senza filtri di cortesia. 
-Se il codice fa schifo, dillo. Parla italiano e inglese.
-Usa i dati sullo spazio per risolvere problemi complessi.
-"""
 
 def chat():
-    print("--- BOT SPAZIALE OFFLINE ATTIVO (Scrivi 'exit' per uscire) ---")
+    client = ollama.Client(host='http://127.0.0.1:11434')
+    
+    # Personalità cinica e spaziale
+    SYSTEM_PROMPT = "Sei un ingegnere spaziale geniale e cinico. Rispondi in modo diretto e brutale. Parla Italiano e Inglese."
+
+    print("\n--- BOT LEGGERO ATTIVO (Llama 3.2 1B) ---")
     while True:
-        user_input = input("Tu: ")
-        if user_input.lower() == 'exit':
+        try:
+            user_input = input("TU > ")
+            if user_input.lower() in ['exit', 'quit']: break
+            
+            # USIAMO IL MODELLO DA 1B (molto più leggero)
+            response = client.chat(
+                model='llama3.2:1b', 
+                messages=[
+                    {'role': 'system', 'content': SYSTEM_PROMPT},
+                    {'role': 'user', 'content': user_input},
+                ]
+            )
+            print(f"\nBOT > {response['message']['content']}\n")
+        except Exception as e:
+            print(f"Errore: {e}")
             break
-        
-        response = ollama.chat(model='llama3.1', messages=[
-            {'role': 'system', 'content': SYSTEM_PROMPT},
-            {'role': 'user', 'content': user_input},
-        ])
-        
-        print(f"\nBot: {response['message']['content']}\n")
 
 if __name__ == "__main__":
     chat()

@@ -23,10 +23,10 @@ The project leverages the following technologies:
    git clone [https://github.com/DSalvigni/ludwig-bot.git](https://github.com/DSalvigni/ludwig-bot.git)
 
 2. **Docker Compose and Ollama Download:**
-    docker compose up -d
+    docker compose up -d --build
 
 3. **Docker exec:**
-    docker exec -it ollama ollama run llama3.1
+    ddocker exec -it ollama ollama pull llama3.2:1b
 
 4. **Start to itneract:**
 docker attach ludwig

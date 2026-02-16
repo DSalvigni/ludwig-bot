@@ -3,6 +3,7 @@ services:
   ollama:
     image: ollama/ollama
     container_name: ollama
+    network_mode: "host"  # <--- Usa la rete del tuo Ubuntu direttamente
     volumes:
       - ./ollama_data:/root/.ollama
     ports:
@@ -12,6 +13,7 @@ services:
   mio-bot:
     build: .
     container_name: ludwig
+    network_mode: "host"
     stdin_open: true  # Fondamentale per scrivergli in console
     tty: true         # Fondamentale per l'interfaccia testuale
     depends_on:
