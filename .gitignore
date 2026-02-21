@@ -1,0 +1,16 @@
+# Docker data (IMPORTANT)
+ollama_data/
+chroma_db/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Environments
+.env
+
+# OS
+.DS_Store

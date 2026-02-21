@@ -1,15 +1,25 @@
-# Usa una versione leggera di Python
 FROM python:3.10-slim
 
-# Crea una cartella di lavoro
 WORKDIR /app
 
-# Copia i requisiti e installali
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Installazione dipendenze di sistema necessarie per ChromaDB e PDF
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libmagic-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copia tutto il resto (il tuo main.py e i documenti)
+# Copia i requisiti
+COPY requirements.txt .
+
+# Forza l'aggiornamento di pip e l'installazione dei pacchetti
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir streamlit 
+
+# Copia il resto dei file
 COPY . .
 
-# Comando per avviare il bot in modalità interattiva
-CMD ["python", "main.py"]
+EXPOSE 8501
+
+# Avvio tramite modulo python
+ENTRYPOINT ["python", "-m", "streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
