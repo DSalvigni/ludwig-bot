@@ -12,11 +12,10 @@ services:
   # Servizio 2: Il tuo Bot personalizzato
   mio-bot:
     build: .
-    container_name: ludwig
+    container_name: mio-bot-spaziale
     network_mode: "host"
-    stdin_open: true  # Fondamentale per scrivergli in console
-    tty: true         # Fondamentale per l'interfaccia testuale
-    depends_on:
-      - ollama
-    environment:
-      - OLLAMA_HOST=ollama
+    volumes:
+      - .:/app
+    ports:
+      - "8501:8501"
+    restart: always
