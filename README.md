@@ -23,8 +23,45 @@ Built by **Daniele S.**
 
 ---
 
+## 📝 Latest Updates
+* **Reset Section:** Added clear instructions on how to "wipe" Ludwig's memory by deleting the `chroma_db` folder.
+* **3-Step Procedure:** Provided a step-by-step guide to resetting the vector database and forcing a re-index.
+* **Technical Detail:** Defined the `documenti_spazio` folder as the "primary knowledge source" for the RAG engine.
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
 ```bash
-git clone
+git clone git@github.com:DSalvigni/ludwig-bot.git
+cd ludwig-bot
+
+### 2. Prepare Knowledge Base
+Place your technical documents (PDF or TXT) inside the `documenti_spazio/` folder. Ludwig will automatically index these files on the next launch.
+
+### 3. Build and Start the Containers
+Run the following command to build the custom Streamlit image and start the services in detached mode:
+
+```bash
+docker compose up -d --build
+
+### 4. View Live Debug Logs
+In consolle run the following command
+```bash
+docker logs -f ludwig
+
+### 5. Force Database Refresh (Full Reset)
+```bash
+# 1. Stop services
+docker compose down
+
+# 2. Delete the old vector database folder
+rm -rf chroma_db
+
+# 3. Restart and re-index
+docker compose up -d
+
+
+---
+*Copyright © 2026 by Daniele S.*
