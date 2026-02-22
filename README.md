@@ -32,8 +32,8 @@ Built by **Daniele S.**
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
 ```bash
+### 1. Clone the repository
 git clone git@github.com:DSalvigni/ludwig-bot.git
 cd ludwig-bot
 
