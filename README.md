@@ -1,32 +1,30 @@
 # Ludwig Bot 🤖
+**"A simple RAG bot"**
 
-AI model used to analyze **ESA documents**, capable of speaking in both **Italian** and **English**. 
-This bot is named **Ludwig**, in honor of the great physicist **Ludwig Boltzmann**.
+Ludwig is a specialized AI assistant designed to analyze technical documents (such as ESA/ECSS standards) with a unique personality: a brilliant but cynical space engineer. Named in honor of the physicist **Ludwig Boltzmann**, this bot doesn't just provide answers—it provides them with an attitude.
+
+Built by **Daniele S.**
 
 ---
 
 ## 🛠️ Technical Stack
+* **LLM Engine:** [Ollama](https://ollama.com/) (Running `llama3.2:1b` locally).
+* **Orchestrator/RAG:** [LangChain](https://www.langchain.com/) (Python).
+* **Vector Database:** [ChromaDB](https://www.trychroma.com/) (Local persistent storage).
+* **UI/Interface:** [Streamlit](https://streamlit.io/) (Web-based chat interface with custom CSS).
+* **Deployment:** Docker & Docker Compose.
 
-The project leverages the following technologies:
-
-* **LLM Engine:** [Ollama](https://ollama.ai/) (handles the offline model).
-* **Orchestrator/RAG:** [LangChain](https://www.langchain.com/) or [LlamaIndex](https://www.llamaindex.ai/) (Python).
-* **Vector DB:** [ChromaDB](https://www.trychroma.com/) or [Qdrant](https://qdrant.tech/) for *Spatial RAG* (runs locally).
-* **UI/Interface:** [Open WebUI](https://openwebui.com/) (ChatGPT-like experience, runs via Docker).
+## ✨ Key Features
+* **Web-Based UI:** Accessible via browser with a sleek, centered login interface and rounded design. Basic user "user/user" for basic login.
+* **RAG (Retrieval-Augmented Generation):** Automatically indexes PDF and TXT documents from the source folder.
+* **Persistent Memory:** Vector embeddings are saved locally in `chroma_db`, avoiding re-indexing at every launch.
+* **Bilingual & Cynical:** Responds in English with a sharp, engineering-focused wit.
+* **Secure Access:** Integrated credential-based login system.
 
 ---
 
 ## 🚀 Getting Started
 
-1. **Clone the repo:**
-   ```bash
-   git clone [https://github.com/DSalvigni/ludwig-bot.git](https://github.com/DSalvigni/ludwig-bot.git)
-
-2. **Docker Compose and Ollama Download:**
-    docker compose up -d --build
-
-3. **Docker exec:**
-    ddocker exec -it ollama ollama pull llama3.2:1b
-
-4. **Start to itneract:**
-docker attach ludwig
+### 1. Clone the repository
+```bash
+git clone

@@ -12,7 +12,7 @@ services:
   # Servizio 2: Il tuo Bot personalizzato
   mio-bot:
     build: .
-    container_name: mio-bot-spaziale
+    container_name: ludwig
     network_mode: "host"
     volumes:
       - .:/app

@@ -2,6 +2,9 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+# Variabile d'ambiente per vedere i log subito
+ENV PYTHONUNBUFFERED=1
+
 # Installazione dipendenze di sistema necessarie per ChromaDB e PDF
 RUN apt-get update && apt-get install -y \
     build-essential \

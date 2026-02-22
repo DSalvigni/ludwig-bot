@@ -42,21 +42,29 @@ st.markdown("""
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
+# --- LOGIN PAGE ---
 def login():
-    # Creiamo tre colonne per centrare il box
-    col1, col2, col3 = st.columns([1, 1, 1])
+    # Usiamo container e colonne per centrare perfettamente
+    _, col2, _ = st.columns([1, 2, 1])
+    
     with col2:
-        st.markdown('<div class="login-box">', unsafe_allow_html=True)
-        st.subheader("Ludwig Login")
-        user = st.text_input("Username")
-        pwd = st.text_input("Password", type="password")
+        # Nota: Ho tolto st.title fuori dal box per evitare lo spazio vuoto
+        st.markdown("""
+            <div style="background-color: #262730; padding: 2rem; border-radius: 15px; border: 1px solid #464b5d; margin-top: 50px;">
+                <h2 style="text-align: center; color: white; margin-bottom: 1.5rem;">Welcome to Ludwig RAG bot Login</h2>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        # Gli input devono stare fuori dal blocco HTML sopra per funzionare con Streamlit
+        user = st.text_input("Username", key="user_input")
+        pwd = st.text_input("Password", type="password", key="pwd_input")
+        
         if st.button("Login"):
             if user == "user" and pwd == "user":
                 st.session_state['logged_in'] = True
                 st.rerun()
             else:
                 st.error("Invalid credentials")
-        st.markdown('</div>', unsafe_allow_html=True)
 
 if not st.session_state['logged_in']:
     login()
@@ -64,21 +72,48 @@ if not st.session_state['logged_in']:
 
 # --- RAG LOGIC ---
 @st.cache_resource
+@st.cache_resource
 def init_rag():
     embeddings = OllamaEmbeddings(model=MODEL, base_url=OLLAMA_URL)
+    
+    # Debug: Controllo se la cartella esiste
+    if not os.path.exists(DOCS_PATH):
+        print(f"DEBUG: Cartella {DOCS_PATH} non trovata. La creo.")
+        os.makedirs(DOCS_PATH)
+
+    # Debug: Lista i file trovati
+    files = os.listdir(DOCS_PATH)
+    print(f"DEBUG: File trovati in {DOCS_PATH}: {files}", flush=True)
+
     if os.path.exists(DB_PATH) and os.listdir(DB_PATH):
+        print(f"DEBUG: Database esistente trovato in {DB_PATH}. Caricamento...")
         return Chroma(persist_directory=DB_PATH, embedding_function=embeddings)
     
-    if not os.path.exists(DOCS_PATH): os.makedirs(DOCS_PATH)
+    print("DEBUG: Database non trovato. Inizio indicizzazione documenti...")
+    
     pdf_loader = DirectoryLoader(DOCS_PATH, glob="./*.pdf", loader_cls=PyPDFLoader, silent_errors=True)
     txt_loader = DirectoryLoader(DOCS_PATH, glob="./*.txt", loader_cls=TextLoader)
+    
     docs = pdf_loader.load() + txt_loader.load()
     
     if docs:
+        print(f"DEBUG: Caricati {len(docs)} documenti.")
+        for d in docs:
+            print(f"DEBUG: Indicizzato file -> {d.metadata.get('source')}")
+            
         splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
         splits = splitter.split_documents(docs)
-        return Chroma.from_documents(documents=splits, embedding=embeddings, persist_directory=DB_PATH)
-    return None
+        
+        vectorstore = Chroma.from_documents(
+            documents=splits, 
+            embedding=embeddings, 
+            persist_directory=DB_PATH
+        )
+        print("DEBUG: Database creato con successo!")
+        return vectorstore
+    else:
+        print("DEBUG: ATTENZIONE! Nessun documento trovato. Ludwig risponderà senza contesto.")
+        return None
 
 vectorstore = init_rag()
 
