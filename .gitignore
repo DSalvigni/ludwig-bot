@@ -1,6 +1,10 @@
 # Docker data (IMPORTANT)
 ollama_data/
 chroma_db/
+logs/
+__pycache__/
+*.log
+
 
 # Python
 __pycache__/

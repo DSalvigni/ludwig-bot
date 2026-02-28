@@ -1,0 +1,11 @@
+--- SECTION 1: CAKES RECIPES ---
+[1] Tiramisù: Layer ladyfingers soaked in strong espresso, topped with a rich mascarpone cream and cocoa powder.
+[2] Sacher Torte: A classic Viennese chocolate cake thinly coated with apricot jam and covered in dark chocolate ganache.
+[3] Cheesecake: A creamy dessert with a buttery graham cracker crust, often served with a red fruit coulis.
+[4] Red Velvet: A striking red cocoa-layered cake with a smooth and tangy cream cheese frosting.
+[5] Apple Pie: A spiced cinnamon apple filling encased in a flaky, golden-brown double butter crust.
+[6] Lemon Meringue: A tart lemon curd base topped with fluffy, toasted peaks of Italian meringue.
+[7] Black Forest: Chocolate sponge cake layers filled with whipped cream and tart sour cherries.
+[8] Mille-feuille: Crisp puff pastry layers alternated with smooth vanilla pastry cream (crème pâtissière).
+[9] Pavlova: A delicate meringue-based cake with a crisp crust and soft marshmallow-like center, topped with fresh fruit.
+[10] Carrot Cake: A moist, spiced cake with grated carrots and walnuts, finished with thick cream cheese frosting.
