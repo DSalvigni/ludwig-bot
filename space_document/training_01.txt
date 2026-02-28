@@ -1,0 +1,23 @@
+--- SECTION 1: PAYLOAD MANAGEMENT SYSTEM (PMS) ---
+[1] The Payload Management System (PMS) is the central intelligence unit responsible for monitoring and controlling all onboard scientific instruments.
+[2] Data Handling: The PMS manages the prioritization of data packets, ensuring that critical telemetry reaches the ground station before secondary mission data.
+[3] Power Distribution: It allocates electrical power to different payloads based on mission phases and thermal constraints.
+[4] Thermal Control: The PMS monitors temperature sensors across the payload bay and activates heaters or radiators to maintain hardware within safe limits.
+[5] Fault Detection: The system runs continuous health-check algorithms to detect malfunctions and automatically switch to redundant backup units.
+[6] Command Sequencing: It interprets complex mission commands from Earth and breaks them down into low-level instructions for individual instruments.
+[7] Storage Management: The PMS oversees the Solid State Mass Memory (SSMM), preventing data overwrites during long periods of signal silence.
+[8] Payload Isolation: In case of a critical power failure, the PMS can perform an emergency "load-shedding" to protect the primary satellite bus.
+[9] Interface Standards: Most PMS architectures follow ECSS-E-ST-50-14C standards for communication between the platform and the payload.
+[10] Real-time Processing: Modern PMS units utilize FPGA-based accelerators to process high-resolution imaging data locally before transmission.
+
+--- SECTION 2: ORBITAL DIFFERENCES (GEO vs LEO) ---
+[11] Altitude: Low Earth Orbit (LEO) typically ranges from 160 to 2,000 km, whereas Geostationary Orbit (GEO) is fixed at approximately 35,786 km.
+[12] Latency: Communication delay in LEO is extremely low (approx. 0.05 seconds), while GEO suffers from significant latency (approx. 0.25 seconds) due to distance.
+[13] Orbital Period: LEO satellites orbit the Earth in about 90 minutes; a GEO satellite takes exactly 24 hours, appearing stationary over one point.
+[14] Coverage: A single GEO satellite can cover about one-third of the Earth's surface, while a LEO satellite has a very small, fast-moving footprint.
+[15] Radiation Environment: GEO satellites are exposed to higher levels of solar radiation and Van Allen belt particles compared to most LEO missions.
+[16] Launch Energy: Reaching GEO requires significantly more fuel and a specialized "transfer orbit" (GTO) compared to a direct LEO insertion.
+[17] Life Span: GEO satellites are built for long-term missions (15+ years), while LEO satellites are often smaller (CubeSats) with shorter lives (3-7 years).
+[18] Mission Use-Case: LEO is ideal for high-resolution Earth observation and Starlink-style internet; GEO is the standard for TV broadcasting and weather monitoring.
+[19] Gravity Gradient: Atmospheric drag is a major factor in LEO, requiring periodic re-boosts; in GEO, drag is non-existent, but lunar gravity causes "drift".
+[20] Space Debris: LEO is becoming highly congested, increasing the risk of Kessler Syndrome; GEO has a dedicated "Graveyard Orbit" for retired satellites.

@@ -1,21 +1,24 @@
 services:
-  # Servizio 1: Il motore che fa girare i modelli offline
+  # Service 1: The engine that runs offline models
   ollama:
     image: ollama/ollama
     container_name: ollama
-    network_mode: "host"  # <--- Usa la rete del tuo Ubuntu direttamente
+    network_mode: "host"  # <--- Directly uses your Ubuntu host network
     volumes:
       - ./ollama_data:/root/.ollama
     ports:
       - "11434:11434"
 
-  # Servizio 2: Il tuo Bot personalizzato
-  mio-bot:
+  # Service 2: Your custom RAG Bot
+  ludwig-bot:
     build: .
-    container_name: mio-bot-spaziale
+    container_name: ludwig
     network_mode: "host"
     volumes:
       - .:/app
+      - ./chroma_db:/app/chroma_db  # Persistent vector database
+      - ./logs:/app/logs            # Persistent logs (log_date_time.log)
+      - ./space_documet:/app/space_documet # Source documents
     ports:
       - "8501:8501"
     restart: always
