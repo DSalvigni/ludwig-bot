@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title="Ludwig Bot", layout="wide")
 
-# --- CSS GEMINI STYLE ---
+# --- CSS GEMINI STYLE FOR LOOK & FEEL ---
 st.markdown("""
     <style>
     .stAppDeployButton {display: none !important;}
@@ -71,14 +71,14 @@ def init_rag():
     logger.info("🚀 Initializing RAG Engine...")
     embeddings = OllamaEmbeddings(model=MODEL, base_url=OLLAMA_URL)
     
-    # Se il database esiste già, lo carichiamo
+    # If db exists, we load it. Otherwise, we build it from the documents. This allows us to keep the db persistent across runs and only re-index if we change the docs.
     if os.path.exists(DB_PATH) and os.listdir(DB_PATH):
         logger.info(f"📂 Loading existing database from {DB_PATH}")
         return Chroma(persist_directory=DB_PATH, embedding_function=embeddings)
     
     logger.info("🆕 Database not found or wiped. Starting fresh indexing...")
     
-    # Carichiamo tutti i PDF e i TXT (inclusi training_00, training_01, ecc.)
+    # We upload TXT or PDF. TXT formatted like the ones available in this sample (including training_00, training_01, ecc.)
     pdf_loader = DirectoryLoader(DOCS_PATH, glob="./*.pdf", loader_cls=PyPDFLoader)
     txt_loader = DirectoryLoader(DOCS_PATH, glob="./*.txt", loader_cls=TextLoader)
     
@@ -88,21 +88,21 @@ def init_rag():
         logger.error(f"⚠️ No documents found in {DOCS_PATH}! Check your files.")
         return None
         
-    # LOG FONDAMENTALE: Ti dice esattamente quali file ha trovato
+    # LOG TO FILES DETECTED
     file_names = list(set([os.path.basename(d.metadata.get('source', 'Unknown')) for d in docs]))
     logger.info(f"📄 FILES DETECTED: {file_names}")
 
-    # Aumentiamo il chunk_size a 1000 per non perdere il contesto dei titoli delle sezioni
+    # We increase chunk size to 1000 and overlap to 150 to create more meaningful chunks that can capture entire sections or paragraphs, while still allowing for some context overlap between them. We also add separators to try to break on double newlines first, which often indicate new sections or paragraphs, helping to preserve the structure of the documents and potentially improving the relevance of retrieved chunks during similarity search.
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000, 
         chunk_overlap=150,
-        separators=["\n\n", "\n", " ", ""] # Prova a rompere prima sui doppi a capo per salvare i titoli
+        separators=["\n\n", "\n", " ", ""] # Try to split on double newlines first, then single newlines, then spaces, and as a last resort, split anywhere if the chunk is too long. This helps preserve the natural structure of the text and can lead to more coherent chunks.
     )
     
     splits = splitter.split_documents(docs)
     logger.info(f"✂️ Created {len(splits)} text chunks from {len(docs)} files.")
     
-    # Generazione dei vettori e salvataggio
+    # Generation of vectors and persistence in ChromaDB. This is the most time-consuming step, especially with larger documents and more chunks, so we log it accordingly.
     logger.info("🧠 Generating embeddings (this might take a while)...")
     vectorstore = Chroma.from_documents(
         documents=splits, 
@@ -117,7 +117,6 @@ vectorstore = init_rag()
 
 # --- SIDEBAR ---
 st.sidebar.title("Ludwig Bot")
-# 2) Dicitura eliminata come richiesto
 
 if os.path.exists(IMG_PATH):
     st.sidebar.image(IMG_PATH, use_container_width=True)
@@ -128,7 +127,7 @@ if st.sidebar.button("Logout"):
 
 # --- CHAT ---
 st.title("Ludwig Bot")
-st.subheader("A simple RAG bot based on Ollama & Llama")
+st.subheader("A simple RAG bot based on Ollama & llama3.2:1b")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -146,7 +145,7 @@ if prompt := st.chat_input("Ask me something..."):
     formatted_sources = set()
     
     if vectorstore:
-        # Aumentiamo k da 3 a 5 per pescare da più file contemporaneamente
+        # K is set to 5 to retrieve the top 5 most relevant chunks, which should provide a good balance between relevance and breadth of context for the model to generate a comprehensive answer. Depending on the size and quality of your documents, you might want to adjust this number up or down.
         results = vectorstore.similarity_search(prompt, k=5) 
         for res in results:
             context_parts.append(res.page_content)
@@ -173,7 +172,7 @@ if prompt := st.chat_input("Ask me something..."):
         response = ollama.chat(model=MODEL, messages=[{'role': 'user', 'content': full_prompt}])
         answer = response['message']['content']
         
-        # Aggiunta riferimenti avanzati
+        # Adding references to the answer if we have formatted sources. This provides transparency about where the information is coming from and allows users to trace back the answer to the original documents, which can be especially important for technical or factual queries.
         if formatted_sources:
             answer += f"\n\n**References:** {source_footer}"
             

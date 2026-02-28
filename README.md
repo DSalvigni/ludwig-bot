@@ -111,9 +111,9 @@ Copyright © 2026 by Daniele S.
 The following structure must be followed
 ```text
 ludwig-bot/
-├── documenxxx\ti_spazio/ (metti qui i tuoi file)
-├── logs/             (si creerà da sola o creala tu)
-├── chroma_db/        (si creerà da sola)
+├── space_document/ (here files for training with the format tranining_01.txt, .._02.txt etc...)
+├── logs/             (self created)
+├── chroma_db/        (self created)
 ├── main.py
 ├── Dockerfile
 ├── docker-compose.yaml
